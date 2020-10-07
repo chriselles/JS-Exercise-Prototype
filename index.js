@@ -40,23 +40,24 @@ Airplane.prototype.land = function () {
 */
 
 function Person(name, age) {
-  this.name=name;
-  this.age=age;
-  this.stomach=[];
+  this.name = name;
+  this.age = age;
+  this.stomach = [];
 }
 
-const chris=newPerson("Chris",51);
+const chris=Person("Chris",51);
 console.log(chris);
 
 Person.prototype.eat=function(someFood) {
-  if (this.stomach.length<10) this.stomach.push(someFood);
+  if (this.stomach.length < 10) this.stomach.push(someFood);
 };
 
-Person.prototype.poop=function() {
-  this.stomach=[];
+Person.prototype.poop = function () {
+  this.stomach = [];
 };
-Person.prototype.toString=function() {
-  return `${this.name},${this.age}`;
+
+Person.prototype.toString = function() {
+  return `${this.name}, ${this.age}`;
 };
 
 /*
@@ -74,14 +75,25 @@ Person.prototype.toString=function() {
 */
 
 function Car(model, milesPerGallon) {
-  this.model=model;
-  this.milesPerGallon=milesPerGallon;
-  this.tank=0;
-  this.odometer=0;
+  this.model = model;
+  this.milesPerGallon = milesPerGallon;
+  this.tank = 0;
+  this.odometer = 0;
 }
 
-Car.prototype.fill=function(gallons) {
-  this.tank+=gallons;
+Car.prototype.fill = function(gallons) {
+  this.tank += gallons;
+};
+
+Car.prototype.drive = function (distance) {
+  if (distance / this.milesPerGallon > this.tank) {
+    this.odometer += this.tank * this.milesPerGallon;
+    this.tank = 0;
+    return 'I rank out of fuel at ${this.odometer} miles.';
+  } else {
+    this.odometer += distance;
+    this.tank -= distance / this.milesPerGallon;
+  }
 };
 
 /*
@@ -93,11 +105,11 @@ Car.prototype.fill=function(gallons) {
 */
 function Baby(name, age, favoriteToy) {
   Person.call(this, name, age);
-  this.favoriteToy=favoriteToy;
+  this.favoriteToy = favoriteToy;
 }
 
-Baby.prototype=Object.create(Person.prototype);
-Baby.prototype.play=function() {
+Baby.prototype = Object.create(Person.prototype);
+Baby.prototype.play = function() {
   return `Playing with ${this.favoriteToy}`;
 };
 
@@ -105,11 +117,12 @@ Baby.prototype.play=function() {
   TASK 4
 
   In your own words explain the four principles for the "this" keyword below:
-  1. Global, if not bound to a function 
-  2. Implicit binding if used in a function then if refers to the object invoking the function
-  3. Explicit binding used with contractor functions 
-  4. New binding creates a new function
-*/
+  1. Global, if not bound to a function then it refers to global scope
+  2. Implicit binding, if "this" is used in a function then if refers to the object invoking the function
+  3. Explicit binding, "this" is also used with contractor functions in the call or apply methods to bind object with another one. 
+  4. New binding, "this" is used in creator functions to initialise the object with the argument data passed to it
+  
+  */
 
 
 ///////// END OF CHALLENGE /////////
@@ -117,8 +130,16 @@ Baby.prototype.play=function() {
 ///////// END OF CHALLENGE /////////
 if (typeof exports !== 'undefined') {
   module.exports = module.exports || {}
-  if (Airplane) { module.exports.Airplane = Airplane }
-  if (Person) { module.exports.Person = Person }
-  if (Car) { module.exports.Car = Car }
-  if (Baby) { module.exports.Baby = Baby }
+  if (Airplane) { 
+    module.exports.Airplane = Airplane;
+   }
+  if (Person) { 
+    module.exports.Person = Person;
+   }
+  if (Car) { 
+    module.exports.Car = Car;
+   }
+  if (Baby) { 
+    module.exports.Baby = Baby;
+   }
 }
